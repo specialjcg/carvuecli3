@@ -1,130 +1,212 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br />
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener"
-        >vue-cli documentation</a
-      >.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li>
-        <a
-          href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel"
-          target="_blank"
-          rel="noopener"
-          >babel</a
-        >
-      </li>
-      <li>
-        <a
-          href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-typescript"
-          target="_blank"
-          rel="noopener"
-          >typescript</a
-        >
-      </li>
-      <li>
-        <a
-          href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint"
-          target="_blank"
-          rel="noopener"
-          >eslint</a
-        >
-      </li>
-      <li>
-        <a
-          href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-unit-mocha"
-          target="_blank"
-          rel="noopener"
-          >unit-mocha</a
-        >
-      </li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li>
-        <a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a>
-      </li>
-      <li>
-        <a href="https://forum.vuejs.org" target="_blank" rel="noopener"
-          >Forum</a
-        >
-      </li>
-      <li>
-        <a href="https://chat.vuejs.org" target="_blank" rel="noopener"
-          >Community Chat</a
-        >
-      </li>
-      <li>
-        <a href="https://twitter.com/vuejs" target="_blank" rel="noopener"
-          >Twitter</a
-        >
-      </li>
-      <li>
-        <a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a>
-      </li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li>
-        <a href="https://router.vuejs.org" target="_blank" rel="noopener"
-          >vue-router</a
-        >
-      </li>
-      <li>
-        <a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a>
-      </li>
-      <li>
-        <a
-          href="https://github.com/vuejs/vue-devtools#vue-devtools"
-          target="_blank"
-          rel="noopener"
-          >vue-devtools</a
-        >
-      </li>
-      <li>
-        <a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener"
-          >vue-loader</a
-        >
-      </li>
-      <li>
-        <a
-          href="https://github.com/vuejs/awesome-vue"
-          target="_blank"
-          rel="noopener"
-          >awesome-vue</a
-        >
-      </li>
-    </ul>
+  <div>
+    <div class="parametre">
+      <input
+        type="number"
+        name="position en y"
+        id="posy"
+        step="10"
+        @click="changey"
+        v-model="choixy"
+      />
+      <label for="number">position en y</label>
+    </div>
+    <div
+      class="maMission"
+      v-for="(task, num) in tasks"
+      :key="num"
+      @mouseenter.prevent="rotationCarroussel"
+      :style="computed2_class(num)"
+    >
+      <div class="maMission2">
+        <div class="transition-maison">
+          <h1>
+            <span>{{ task }}</span>
+          </h1>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 
-@Component
+class positionCarrousselglobal {
+  x: Array<number>;
+  y: Array<number>;
+  z: Array<number>;
+  expand: Array<number>;
+  opa: Array<number>;
+  sc: Array<number>;
+  zindex: Array<number>;
+  constructor(
+    x: Array<number>,
+    y: Array<number>,
+    z: Array<number>,
+    expand: Array<number>,
+    opa: Array<number>,
+    sc: Array<number>,
+    zindex: Array<number>
+  ) {
+    this.x = x;
+    this.y = y;
+    this.z = z;
+    this.expand = expand;
+    this.opa = opa;
+    this.sc = sc;
+    this.zindex = zindex;
+  }
+}
+@Component({})
 export default class HelloWorld extends Vue {
-  @Prop() private msg!: string;
+  index: number = 0;
+
+  positionCarroussel: positionCarrousselglobal;
+
+  choixy: number = 0;
+  tasks: Array<string> = [
+    "On a deux vies. La deuxième commence quand on réalise qu’on n’en a qu’une. Confucius",
+    "« Si vous pouvez le rêver, vous pouvez le faire. » Walt Disney",
+    "Si vous pensez que l’aventure est dangereuse, essayez la routine, elle est mortelle. » Paulo Coelho",
+    "« Un voyage de mille lieues commence toujours par un premier pas. » Lao Tseu",
+    "« J’ai des questions à toutes vos réponses »  Woody Allen -",
+    "« Les autres parlent, moi je travaille »picasso"
+  ];
+  mounted() {
+    this.choixy = 0;
+    this.index = 0;
+  }
+  constructor() {
+    super();
+    this.choixy = 0;
+    this.index = 0;
+    this.positionCarroussel = new positionCarrousselglobal(
+      [0, 0, 0, 0, 0, 0],
+      [300, 150, 25, 25, 150, 300],
+      [0, 100, 50, 100, 50, 0],
+      [20, 20, 20, 20, 20, 20],
+      [0.9, 0.7, 0.7, 0.5, 0.5, 0.3],
+      [1, 0.8, 0.7, 0.6, 0.5, 0.4],
+      [6, 5, 4, 3, 2, 1]
+    );
+  }
+
+  computed2_class(num: number) {
+    this.index = num;
+    var tran = "";
+
+    tran =
+      "translate3d(" +
+      this.positionCarroussel.x[this.index] +
+      "px, " +
+      this.positionCarroussel.y[this.index] +
+      "px," +
+      (this.positionCarroussel.z[this.index] +
+        this.index * this.positionCarroussel.expand[this.index]) +
+      "px) scale(" +
+      this.positionCarroussel.sc[this.index] +
+      ")";
+
+    return {
+      transition: "3s ease",
+      transform: tran,
+      "z-index": this.positionCarroussel.zindex[this.index],
+      opacity: this.positionCarroussel.opa[this.index]
+    };
+  }
+
+  rotationLignecarroussel(positionCarrousselinter: Array<number>) {
+    var interCarroussel = 0;
+    interCarroussel = positionCarrousselinter[0];
+    for (var i = 0; i < positionCarrousselinter.length - 1; i++) {
+      positionCarrousselinter[i] = positionCarrousselinter[i + 1];
+    }
+    positionCarrousselinter[
+      positionCarrousselinter.length - 1
+    ] = interCarroussel;
+    return positionCarrousselinter;
+  }
+  rotationCarroussel() {
+    this.positionCarroussel.x = this.rotationLignecarroussel(
+      this.positionCarroussel.x
+    );
+    this.positionCarroussel.y = this.rotationLignecarroussel(
+      this.positionCarroussel.y
+    );
+    this.positionCarroussel.z = this.rotationLignecarroussel(
+      this.positionCarroussel.z
+    );
+    this.positionCarroussel.expand = this.rotationLignecarroussel(
+      this.positionCarroussel.expand
+    );
+    this.positionCarroussel.sc = this.rotationLignecarroussel(
+      this.positionCarroussel.sc
+    );
+    this.positionCarroussel.opa = this.rotationLignecarroussel(
+      this.positionCarroussel.opa
+    );
+    this.positionCarroussel.zindex = this.rotationLignecarroussel(
+      this.positionCarroussel.zindex
+    );
+    for (var i = 0; i < this.positionCarroussel.x.length - 1; i++) {
+      this.computed2_class(i);
+    }
+  }
+
+  changey(): void {
+    for (var i = 0; i < 5; i++) {
+      this.positionCarroussel.y[i] = this.positionCarroussel.y[i] + this.choixy;
+    }
+    for (i = 0; i < this.positionCarroussel.x.length - 1; i++) {
+      this.computed2_class(i);
+    }
+  }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-h3 {
-  margin: 40px 0 0;
+.maMission {
+  height: 10vw;
+  position: absolute;
+  top: 0;
+  left: 20vw;
+  bottom: 0;
+  right: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  /*perspective: 2px;*/
+  transform-style: preserve-3d;
+  /*top: 50%;
+
+        bottom: 0;
+        left: 50%;*/
+  width: 50vw;
+  background-color: #445200;
 }
-ul {
-  list-style-type: none;
-  padding: 0;
+
+.maMission2 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: auto;
+  width: 50vw;
+  color: #e8f6a4;
+  text-align: center;
+
+  top: 50%;
+  /* poussé de la moitié de hauteur du référent */
+  transform: translateY(-50%);
+  /* tiré de la moitié de sa propre hauteur */
 }
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
+
+h1 {
+  letter-spacing: 0vw;
+  font-family: Open Sans;
+  font-size: 1.618em;
+  font-weight: 800;
+  line-height: 1.2;
+  margin: 1.414em 0 0.5em;
 }
 </style>
