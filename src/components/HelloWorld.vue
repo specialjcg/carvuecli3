@@ -15,8 +15,9 @@
       class="maMission"
       v-for="(task, num) in tasks"
       :key="num"
-      @mouseenter.prevent="rotationCarroussel"
-      :style="computed2_class(num)"
+      @mouseenter.prevent="rotationCarroussel()"
+      
+      :id="imginfo(num)"
     >
       <div class="maMission2">
         <div class="transition-maison">
@@ -76,11 +77,17 @@ export default class HelloWorld extends Vue {
   mounted() {
     this.choixy = 0;
     this.index = 0;
-  }
+     this.rotationCarroussel()
+  } 
+   imginfo(index1:number) {
+      var essai = "imginfo" + index1;
+
+      return essai;
+    }
   constructor() {
     super();
     this.choixy = 0;
-    this.index = 0;
+   
     this.positionCarroussel = new positionCarrousselglobal(
       [0, 0, 0, 0, 0, 0],
       [300, 150, 25, 25, 150, 300],
@@ -90,31 +97,37 @@ export default class HelloWorld extends Vue {
       [1, 0.8, 0.7, 0.6, 0.5, 0.4],
       [6, 5, 4, 3, 2, 1]
     );
+   
   }
-
-  computed2_class(num: number) {
-    this.index = num;
-    var tran = "";
-
+styleclass(num1:number){
+   var tran = "";
+   
     tran =
       "translate3d(" +
-      this.positionCarroussel.x[this.index] +
+      this.positionCarroussel.x[num1] +
       "px, " +
-      this.positionCarroussel.y[this.index] +
+      this.positionCarroussel.y[num1] +
       "px," +
-      (this.positionCarroussel.z[this.index] +
-        this.index * this.positionCarroussel.expand[this.index]) +
+      (this.positionCarroussel.z[num1] +
+        num1 * this.positionCarroussel.expand[num1]) +
       "px) scale(" +
-      this.positionCarroussel.sc[this.index] +
+      this.positionCarroussel.sc[num1] +
       ")";
+    var essai:number = this.positionCarroussel.zindex[num1];
+  var opa = this.positionCarroussel.opa[num1].toString();
+  const myElement = document.getElementById("imginfo" + num1)!;
+  if (myElement!=null){
+     myElement.style.opacity = opa;
+     myElement.style.transition="3s ease";
+     myElement.style.transform=tran;
+     myElement.style.zIndex=essai.toString();
 
-    return {
-      transition: "3s ease",
-      transform: tran,
-      "z-index": this.positionCarroussel.zindex[this.index],
-      opacity: this.positionCarroussel.opa[this.index]
-    };
-  }
+     
+     }
+
+
+}
+  
 
   rotationLignecarroussel(positionCarrousselinter: Array<number>) {
     var interCarroussel = 0;
@@ -128,6 +141,7 @@ export default class HelloWorld extends Vue {
     return positionCarrousselinter;
   }
   rotationCarroussel() {
+   
     this.positionCarroussel.x = this.rotationLignecarroussel(
       this.positionCarroussel.x
     );
@@ -149,8 +163,8 @@ export default class HelloWorld extends Vue {
     this.positionCarroussel.zindex = this.rotationLignecarroussel(
       this.positionCarroussel.zindex
     );
-    for (var i = 0; i < this.positionCarroussel.x.length - 1; i++) {
-      this.computed2_class(i);
+    for (var i = 0; i < this.positionCarroussel.x.length ; i++) {
+       this.styleclass(i)
     }
   }
 
@@ -158,8 +172,8 @@ export default class HelloWorld extends Vue {
     for (var i = 0; i < 5; i++) {
       this.positionCarroussel.y[i] = this.positionCarroussel.y[i] + this.choixy;
     }
-    for (i = 0; i < this.positionCarroussel.x.length - 1; i++) {
-      this.computed2_class(i);
+    for (i = 0; i < this.positionCarroussel.x.length ; i++) {
+       this.styleclass(i)
     }
   }
 }
