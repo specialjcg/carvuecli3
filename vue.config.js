@@ -1,6 +1,12 @@
+const path = require('path')
 module.exports = {
   configureWebpack: {
-    devtool: 'source-map'
+    devtool: 'source-map',
+     resolve: {
+       alias: {
+         'bootstrap-components': path.resolve(__dirname, 'node_modules/bootstrap-vue/es/components')
+       }
+     }
   },
 
   publicPath: '/carvuecli3',

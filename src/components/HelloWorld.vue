@@ -1,16 +1,11 @@
 <template>
   <div>
     <div class="parametre">
-      <input
-        type="number"
-        name="position en y"
-        id="posy"
-        step="10"
-        @click="changey"
-        v-model="choixy"
-      />
-      <label for="number">position en y</label>
-    </div>
+    
+    <label for="posy">position en y</label>
+    <b-form-input id="posy" v-model="choixy" type="range" min="-100" max="100" @change="changey" size="1"></b-form-input>
+    <div class="mt-2">Value: {{ choixy }}</div>
+   </div>
     <div
       class="maMission"
       v-for="(task, num) in tasks"
@@ -169,8 +164,8 @@ styleclass(num1:number){
   }
 
   changey(): void {
-    for (var i = 0; i < 5; i++) {
-      this.positionCarroussel.y[i] = this.positionCarroussel.y[i] + this.choixy;
+    for (var i = 0; i < 6; i++) {
+      this.positionCarroussel.y[i] = this.positionCarroussel.y[i] + Number(this.choixy);
     }
     for (i = 0; i < this.positionCarroussel.x.length ; i++) {
        this.styleclass(i)
@@ -181,6 +176,11 @@ styleclass(num1:number){
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+$color1: rgba(5, 81, 148, 1);
+$color2: rgba(87, 74, 226, 1);
+$color3: rgba(101, 69, 151, 1);
+$color4: rgba(171, 129, 205, 1);
+$color5: rgba(226, 173, 242, 1);
 .maMission {
   height: 10vw;
   position: absolute;
@@ -197,7 +197,7 @@ styleclass(num1:number){
         bottom: 0;
         left: 50%;*/
   width: 50vw;
-  background-color: #445200;
+  background-color:$color1;
 }
 
 .maMission2 {
@@ -206,7 +206,7 @@ styleclass(num1:number){
   left: 0;
   height: auto;
   width: 50vw;
-  color: #e8f6a4;
+  color:$color5;
   text-align: center;
 
   top: 50%;
@@ -214,7 +214,9 @@ styleclass(num1:number){
   transform: translateY(-50%);
   /* tiré de la moitié de sa propre hauteur */
 }
-
+.parametre{
+  max-width: 250px;
+}
 h1 {
   letter-spacing: 0vw;
   font-family: Open Sans;
