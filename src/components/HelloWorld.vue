@@ -57,7 +57,7 @@
           id="poslargeur"
           v-model="choixlargeur"
           type="range"
-          min="0"
+          min="10"
           max="60"
           @input="changeWidth"
           size="1"
@@ -72,9 +72,9 @@
           id="poshauteur"
           v-model="choixhauteur"
           type="range"
-          min="-100"
-          max="100"
-          @input="choixhauteur"
+          min="1"
+          max="50"
+          @input="changeHeight"
           size="1"
         ></b-form-input>
       </div>
@@ -89,11 +89,11 @@
         :id="imginfo(num)"
       >
         <div class="maMission2">
-          <div class="transition-maison">
+          
             <h1>
-              <span>{{ task }}</span>
+              {{ task }}
             </h1>
-          </div>
+          
         </div>
       </div>
     </section>
@@ -141,7 +141,7 @@ export default class HelloWorld extends Vue {
     "« Si vous pouvez le rêver, vous pouvez le faire. » Walt Disney",
     "Si vous pensez que l’aventure est dangereuse, essayez la routine, elle est mortelle. » Paulo Coelho",
     "« Un voyage de mille lieues commence toujours par un premier pas. » Lao Tseu",
-    "« J’ai des questions à toutes vos réponses »  Woody Allen -",
+    "« J’ai des questions à toutes vos réponses »  Woody Allen ",
     "« Les autres parlent, moi je travaille »picasso"
   ];
   choixx: number = 0;
@@ -151,7 +151,7 @@ export default class HelloWorld extends Vue {
   choixxinter: number = 0;
   choixscinter: number = 0;
 
-  choixhauteur: number = 0;
+  choixhauteur: number = 3;
   choixlargeur: number = 50;
   choixlargeurinter: number = 0;
 
@@ -162,7 +162,7 @@ export default class HelloWorld extends Vue {
     this.choixyinter = 0;
     this.choixxinter = 0;
     this.choixscinter = 0;
-    this.choixhauteur = 0;
+    this.choixhauteur = 3;
     this.choixlargeur = 50;
     this.choixlargeurinter = 0;
     this.index = 0;
@@ -228,7 +228,15 @@ export default class HelloWorld extends Vue {
           this.choixlargeur + "vw";
       }
     }
-    this.choixlargeurinter = this.choixlargeur;
+  }
+  changeHeight() {
+    for (var num1 = 0; num1 < 6; num1++) {
+      const myElement = document.getElementById("imginfo" + num1)!;
+      if (myElement != null) {
+        myElement.style.height =
+          this.choixhauteur + "vh";
+      }
+    }
   }
   rotationLignecarroussel(positionCarrousselinter: Array<number>) {
     var interCarroussel = 0;
@@ -323,16 +331,16 @@ $color5: rgba(226, 173, 242, 1);
 .maMission {
   height: 10vw;
   position: absolute;
-	display: inline-block;
+
  top: 5vw;
   left: 10vw;
   bottom: 0;
   right: 0;
 
-
+	
     
   overflow-x: hidden;
-  overflow-y: auto;
+  overflow-y: hidden;
   /*perspective: 2px;*/
   transform-style: preserve-3d;
   /*top: 50%;
@@ -345,17 +353,22 @@ $color5: rgba(226, 173, 242, 1);
 
 .maMission2 {
   position: absolute;
-  top: 0;
-  left: 0;
+  margin:auto;
+  width:100%;
   height: auto;
-  width: 50vw;
+
   color: $color5;
   text-align: center;
+
+overflow-x: hidden;
+  overflow-y: hidden;
 
   top: 50%;
   /* poussé de la moitié de hauteur du référent */
   transform: translateY(-50%);
   /* tiré de la moitié de sa propre hauteur */
+   
+
 }
 
 .styleParametre {
@@ -363,7 +376,7 @@ $color5: rgba(226, 173, 242, 1);
   top: 1vh;
   background: $color5;
   left: 2vw;
-  width: 300px;
+  width: 20vw;
   height: 90vh;
   border-radius: 1vw;
   box-shadow: 3px 3px 20px rgba(0, 0, 0, 0.5);
@@ -409,5 +422,6 @@ h1 {
   font-size: 1.618em;
   font-weight: 800;
   line-height: 1.2;
+ 
 }
 </style>
