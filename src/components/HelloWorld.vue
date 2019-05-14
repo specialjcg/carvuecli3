@@ -90,15 +90,13 @@
       <h1 class="titre">Rendu</h1>
       <div
         v-for="(task, num) in tasks"
+        :id="imginfo(num)"
         :key="num"
         class="maMission"
-        :id="imginfo(num)"
         @mouseenter.prevent="rotationCarroussel()"
       >
         <div class="maMission2">
-          <h1>
-            {{ task }}
-          </h1>
+          <h1>{{ task.title }}<br />{{ task.author }}</h1>
         </div>
       </div>
     </section>
@@ -108,7 +106,14 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import io from "socket.io-client";
-
+class citation {
+  title: string;
+  author: string;
+  constructor(title: string, author: string) {
+    this.title = title;
+    this.author = author;
+  }
+}
 class positionCarrousselglobal {
   x: Array<number>;
   y: Array<number>;
@@ -139,11 +144,18 @@ class positionCarrousselglobal {
 @Component({})
 export default class HelloWorld extends Vue {
   index: number = 0;
-  socket = io("http://localhost:3000");
+  socket: any;
   positionCarroussel: positionCarrousselglobal;
 
   choixy: number = 0;
-  tasks: string[] = [];
+  tasks: citation[] = [
+    new citation("", ""),
+    new citation("", ""),
+    new citation("", ""),
+    new citation("", ""),
+    new citation("", ""),
+    new citation("", "")
+  ];
   choixx: number = 0;
   choixsc: number = 0;
 
@@ -167,7 +179,19 @@ export default class HelloWorld extends Vue {
     this.choixlargeur = 50;
     this.choixlargeurinter = 0;
     this.index = 0;
+    this.tasks = [
+      new citation("", ""),
+      new citation("", ""),
+      new citation("", ""),
+      new citation("", ""),
+      new citation("", ""),
+      new citation("", "")
+    ];
+
+    this.socket = io("http://localhost:3000");
+
     this.rotationCarroussel();
+    this.messagetext();
   }
 
   imginfo(index1: number) {
@@ -198,17 +222,17 @@ export default class HelloWorld extends Vue {
   }
   messagetext() {
     this.socket.emit("lancerecherche2");
-    this.socket.emit("resultat", function(data) {
-      console.log(data);
-    }); 
-   var self = this;
-    this.socket.on("messagetext", function(data) {
-     
+    this.socket.emit("resultat", function(data: any) {});
+    var self = this;
+
+    this.socket.on("messagetext", function(data: any) {
       for (let i = 0; i < data.length; i++) {
-        self.tasks.push(data[i].title);
+        self.tasks[i] = new citation(data[i].title, data[i].author);
       }
+      var temp = (self.choixx = 0);
+      self.choixx = 10;
+      self.choixx = temp;
     });
-   
   }
   styleclass(num1: number) {
     var tran = "";
