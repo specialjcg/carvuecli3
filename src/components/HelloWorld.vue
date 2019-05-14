@@ -1,11 +1,14 @@
 <template>
   <div>
     <section class="styleParametre">
+      <button @click="messagetext()">contenu recherche</button>
+
       <h1 class="titre">Réglage</h1>
       <div class="parametre">
         <!--<div class="titre">Réglage</div>-->
         <button type="button" class="btn btn-3">
-          position en y<span class="badge">{{ choixy }}</span>
+          position en y
+          <span class="badge">{{ choixy }}</span>
         </button>
         <br /><br />
         <b-form-input
@@ -14,13 +17,14 @@
           type="range"
           min="-100"
           max="100"
-          @input="changey"
           size="1"
+          @input="changey"
         ></b-form-input>
       </div>
       <div class="parametre">
         <button type="button" class="btn btn-3">
-          position en x<span class="badge">{{ choixx }}</span>
+          position en x
+          <span class="badge">{{ choixx }}</span>
         </button>
         <br /><br />
         <b-form-input
@@ -29,13 +33,14 @@
           type="range"
           min="-100"
           max="100"
-          @input="changex"
           size="1"
+          @input="changex"
         ></b-form-input>
       </div>
       <div class="parametre">
         <button type="button" class="btn btn-3">
-          echelle<span class="badge">{{ choixsc }}</span>
+          echelle
+          <span class="badge">{{ choixsc }}</span>
         </button>
         <br /><br />
         <b-form-input
@@ -44,13 +49,14 @@
           type="range"
           min="-100"
           max="100"
-          @input="changesc"
           size="1"
+          @input="changesc"
         ></b-form-input>
       </div>
       <div class="parametre">
         <button type="button" class="btn btn-3">
-          largeur panneau<span class="badge">{{ choixlargeur }}</span>
+          largeur panneau
+          <span class="badge">{{ choixlargeur }}</span>
         </button>
         <br /><br />
         <b-form-input
@@ -59,13 +65,14 @@
           type="range"
           min="10"
           max="60"
-          @input="changeWidth"
           size="1"
+          @input="changeWidth"
         ></b-form-input>
       </div>
       <div class="parametre">
         <button type="button" class="btn btn-3">
-          hauteur panneau<span class="badge">{{ choixhauteur }}</span>
+          hauteur panneau
+          <span class="badge">{{ choixhauteur }}</span>
         </button>
         <br /><br />
         <b-form-input
@@ -74,26 +81,24 @@
           type="range"
           min="1"
           max="50"
-          @input="changeHeight"
           size="1"
+          @input="changeHeight"
         ></b-form-input>
       </div>
     </section>
     <section class="styleParametre2">
       <h1 class="titre">Rendu</h1>
       <div
-        class="maMission"
         v-for="(task, num) in tasks"
         :key="num"
-        @mouseenter.prevent="rotationCarroussel()"
+        class="maMission"
         :id="imginfo(num)"
+        @mouseenter.prevent="rotationCarroussel()"
       >
         <div class="maMission2">
-          
-            <h1>
-              {{ task }}
-            </h1>
-          
+          <h1>
+            {{ task }}
+          </h1>
         </div>
       </div>
     </section>
@@ -102,6 +107,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
+import io from "socket.io-client";
 
 class positionCarrousselglobal {
   x: Array<number>;
@@ -111,6 +117,7 @@ class positionCarrousselglobal {
   opa: Array<number>;
   sc: Array<number>;
   zindex: Array<number>;
+
   constructor(
     x: Array<number>,
     y: Array<number>,
@@ -132,18 +139,11 @@ class positionCarrousselglobal {
 @Component({})
 export default class HelloWorld extends Vue {
   index: number = 0;
-
+  socket = io("http://localhost:3000");
   positionCarroussel: positionCarrousselglobal;
 
   choixy: number = 0;
-  tasks: Array<string> = [
-    "On a deux vies. La deuxième commence quand on réalise qu’on n’en a qu’une. Confucius",
-    "« Si vous pouvez le rêver, vous pouvez le faire. » Walt Disney",
-    "Si vous pensez que l’aventure est dangereuse, essayez la routine, elle est mortelle. » Paulo Coelho",
-    "« Un voyage de mille lieues commence toujours par un premier pas. » Lao Tseu",
-    "« J’ai des questions à toutes vos réponses »  Woody Allen ",
-    "« Les autres parlent, moi je travaille »picasso"
-  ];
+  tasks: string[] = [];
   choixx: number = 0;
   choixsc: number = 0;
 
@@ -154,6 +154,7 @@ export default class HelloWorld extends Vue {
   choixhauteur: number = 3;
   choixlargeur: number = 50;
   choixlargeurinter: number = 0;
+  citationseul: string = "";
 
   mounted() {
     this.choixy = 0;
@@ -168,6 +169,7 @@ export default class HelloWorld extends Vue {
     this.index = 0;
     this.rotationCarroussel();
   }
+
   imginfo(index1: number) {
     var essai = "imginfo" + index1;
 
@@ -193,6 +195,20 @@ export default class HelloWorld extends Vue {
       [1, 0.8, 0.7, 0.6, 0.5, 0.4],
       [6, 5, 4, 3, 2, 1]
     );
+  }
+  messagetext() {
+    this.socket.emit("lancerecherche2");
+    this.socket.emit("resultat", function(data) {
+      console.log(data);
+    }); 
+   var self = this;
+    this.socket.on("messagetext", function(data) {
+     
+      for (let i = 0; i < data.length; i++) {
+        self.tasks.push(data[i].title);
+      }
+    });
+   
   }
   styleclass(num1: number) {
     var tran = "";
@@ -224,8 +240,7 @@ export default class HelloWorld extends Vue {
     for (var num1 = 0; num1 < 6; num1++) {
       const myElement = document.getElementById("imginfo" + num1)!;
       if (myElement != null) {
-        myElement.style.width =
-          this.choixlargeur + "vw";
+        myElement.style.width = this.choixlargeur + "vw";
       }
     }
   }
@@ -233,8 +248,7 @@ export default class HelloWorld extends Vue {
     for (var num1 = 0; num1 < 6; num1++) {
       const myElement = document.getElementById("imginfo" + num1)!;
       if (myElement != null) {
-        myElement.style.height =
-          this.choixhauteur + "vh";
+        myElement.style.height = this.choixhauteur + "vh";
       }
     }
   }
@@ -332,13 +346,11 @@ $color5: rgba(226, 173, 242, 1);
   height: 10vw;
   position: absolute;
 
- top: 5vw;
+  top: 5vw;
   left: 10vw;
   bottom: 0;
   right: 0;
 
-	
-    
   overflow-x: hidden;
   overflow-y: hidden;
   /*perspective: 2px;*/
@@ -353,22 +365,20 @@ $color5: rgba(226, 173, 242, 1);
 
 .maMission2 {
   position: absolute;
-  margin:auto;
-  width:100%;
+  margin: auto;
+  width: 100%;
   height: auto;
 
   color: $color5;
   text-align: center;
 
-overflow-x: hidden;
+  overflow-x: hidden;
   overflow-y: hidden;
 
   top: 50%;
   /* poussé de la moitié de hauteur du référent */
   transform: translateY(-50%);
   /* tiré de la moitié de sa propre hauteur */
-   
-
 }
 
 .styleParametre {
@@ -390,8 +400,7 @@ overflow-x: hidden;
   height: 90vh;
   border-radius: 1vw;
   box-shadow: 3px 3px 20px rgba(0, 0, 0, 0.5);
-   text-align: center;
-
+  text-align: center;
 }
 .titre {
   position: relative;
@@ -422,6 +431,5 @@ h1 {
   font-size: 1.618em;
   font-weight: 800;
   line-height: 1.2;
- 
 }
 </style>
