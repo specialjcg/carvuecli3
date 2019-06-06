@@ -1,10 +1,11 @@
 <template>
   <div>
     <section class="styleParametre">
-      <button @click="messagetext()">contenu recherche</button>
-
+     
       <h1 class="titre">Réglage</h1>
-      <div class="parametre">
+      <div class="parametre"> 
+        <button @click="messagetext()" class="btn btn-3">changer les citations</button>
+
         <!--<div class="titre">Réglage</div>-->
         <button type="button" class="btn btn-3">
           position en y
