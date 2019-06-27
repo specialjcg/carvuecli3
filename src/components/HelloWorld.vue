@@ -1,10 +1,11 @@
 <template>
   <div>
     <section class="styleParametre">
-     
       <h1 class="titre">Réglage</h1>
-      <div class="parametre"> 
-        <button @click="messagetext()" class="btn btn-3">changer les citations</button>
+      <div class="parametre">
+        <button class="btn btn-3" @click="messagetext()">
+          changer les citations
+        </button>
 
         <!--<div class="titre">Réglage</div>-->
         <button type="button" class="btn btn-3">
@@ -150,12 +151,12 @@ export default class HelloWorld extends Vue {
 
   choixy: number = 0;
   tasks: citation[] = [
-    new citation("", ""),
-    new citation("", ""),
-    new citation("", ""),
-    new citation("", ""),
-    new citation("", ""),
-    new citation("", "")
+    new citation("Les lois inutiles affaiblissent les lois nécessaires.", "Montesquieu"),
+    new citation(" On a encore à apprendre même après quarante ans de métier.", "Daniel Pennac"),
+    new citation(" La beauté fraîche et vraie ne peut rien cacher.", "George Sand"),
+    new citation("Il y a moins de bonheur à savoir qu'à croire et à espérer.", "Thomas Moore"),
+    new citation("Ce que tu as reçu de tes ancêtres, acquiers-le pour le posséder.", "Goethe"),
+    new citation("Souvent les flatteurs sont exposés à louer des ânes.", " Jean-Louis-Auguste Commerson ;")
   ];
   choixx: number = 0;
   choixsc: number = 0;
@@ -181,15 +182,23 @@ export default class HelloWorld extends Vue {
     this.choixlargeurinter = 0;
     this.index = 0;
     this.tasks = [
-      new citation("", ""),
-      new citation("", ""),
-      new citation("", ""),
-      new citation("", ""),
-      new citation("", ""),
-      new citation("", "")
+       new citation("Les lois inutiles affaiblissent les lois nécessaires.", "Montesquieu"),
+    new citation(" On a encore à apprendre même après quarante ans de métier.", "Daniel Pennac"),
+    new citation(" La beauté fraîche et vraie ne peut rien cacher.", "George Sand"),
+    new citation("Il y a moins de bonheur à savoir qu'à croire et à espérer.", "Thomas Moore"),
+    new citation("Ce que tu as reçu de tes ancêtres, acquiers-le pour le posséder.", "Goethe"),
+    new citation("Souvent les flatteurs sont exposés à louer des ânes.", " Jean-Louis-Auguste Commerson ;")
     ];
+var connectionOptions =  {
+              "secure": false,
+            "force new connection" : true,
+            "reconnectionAttempts": "Infinity", //avoid having user reconnect manually in order to prevent dead clients after a server restart
+            "timeout" : 10000, //before connect_error and connect_timeout are emitted.
+            "transports" :["websocket","flashsocket","polling"]
+        };
+   this.socket = io("https://valorisetonweb.fr:3000",connectionOptions);
 
-    this.socket = io("http://localhost:3000");
+
 
     this.rotationCarroussel();
     this.messagetext();
