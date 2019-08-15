@@ -1,0 +1,6 @@
+projectKey=carvuecli3
+serverUrl=http://localhost:9000
+serverVersion=7.9.1.27448
+dashboardUrl=http://localhost:9000/dashboard?id=carvuecli3
+ceTaskId=AWyKQLXM7PcLN4Vbhev-
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AWyKQLXM7PcLN4Vbhev-
