@@ -468,10 +468,6 @@ $color5: rgba(226, 173, 242, 1);
   overflow-y: hidden;
   /*perspective: 2px;*/
   transform-style: preserve-3d;
-  /*top: 50%;
-  font-size: calc(1vw + 1vh + 1vmin);
-        bottom: 0;
-        left: 50%;*/
   width: 50vw;
   background-color: $color1;
 }
